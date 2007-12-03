@@ -129,3 +129,7 @@ The last thing that is needed is to implement the keyPressed method. A knowledge
 }}}
 
 There is a lot going on in this method, but building it incrementally seemed very confusing to me, so I thought I'd show it all first then explain it.
+
+First off, there are three general cases here - two of which fall into an even broader case.
+
+The first case is in between the {{{if() {...}}} statement and the {{{...} else {...}}} statement.
