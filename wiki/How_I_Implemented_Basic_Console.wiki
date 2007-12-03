@@ -59,3 +59,30 @@ public class MyConsole extends JFrame {
 }}}
 
 You will notice here that I have used a method getContentPane() a couple of times. This is because a Swing JFrame has several panes, which you can learn about in [http://java.sun.com/docs/books/tutorial/ Sun's Java Tutorial].
+
+The next thing we need to do is implement the KeyListener interface.
+
+{{{
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class MyConsole extends JFrame implements KeyListener {
+  
+  private JTextArea consoleTextArea;
+
+  public MyConsole() {
+    super("My Console");
+    getContentPane().setLayout(new BorderLayout());
+    
+    consoleTextArea = new JTextArea();
+    consoleTextArea.setEditable(false);
+    
+    getContentPane().add(consoleTextArea, BorderLayout.CENTER);
+  }
+  
+  public void keyPressed(KeyEvent ke) { }
+  public void keyReleased(KeyEvent ke) { }
+  public void keyTyped(KeyEvent ke) { }
+  ...
+}}}
