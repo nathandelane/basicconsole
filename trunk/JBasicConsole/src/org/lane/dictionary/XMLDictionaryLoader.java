@@ -15,6 +15,28 @@ package org.lane.dictionary;
  *
  */
 
+import java.io.*;
+import org.w3c.dom.*;
+import javax.xml.parsers.*;
+
 public class XMLDictionaryLoader {
+	
+	public XMLDictionaryLoader(String classPath, String className, boolean isResource) {
+		try {
+			DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = builderFactory.newDocumentBuilder();
+
+			InputStream in = new FileInputStream("");
+			Document response = builder.parse(in);
+			in.close();
+			
+			NodeList doubles = response.getElementsByTagName("double");
+			Node datum = doubles.item(0);
+			Text result = (Text) datum.getFirstChild();
+			System.out.println(result.getNodeValue());
+		} catch(Exception e) {
+			
+		}
+	}
 
 }
