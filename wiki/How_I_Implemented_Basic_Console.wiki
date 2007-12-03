@@ -70,6 +70,7 @@ import java.awt.event.*;
 public class MyConsole extends JFrame implements KeyListener {
   
   private JTextArea consoleTextArea;
+  private String buffer;
 
   public MyConsole() {
     super("My Console");
@@ -81,6 +82,9 @@ public class MyConsole extends JFrame implements KeyListener {
     getContentPane().add(consoleTextArea, BorderLayout.CENTER);
     
     consoleTextArea.addKeyListener(this);
+    
+    setVisible(true);
+    consoleTextArea.append("> ");
   }
   
   public void keyPressed(KeyEvent ke) { }
@@ -89,4 +93,39 @@ public class MyConsole extends JFrame implements KeyListener {
   ...
 }}}
 
-I use the keyword {{{this}}} because the class implementing the !KeyListener is "this" class ;). For those who don't know this refers to the current context (Class) in Java.
+I use the keyword {{{this}}} because the class implementing the !KeyListener is "this" class ;). For those who don't know this refers to the current context (Class) in Java. You should also notice the new private String variable named buffer. This is where we will store user input.
+
+The last thing that is needed is to implement the keyPressed method. A knowledge of the KeyEvent class is necessary to do this efficiently. Here I will treat only a basic subset of possibilities that you might implement.
+
+{{{
+  public void keyPressed(KeyEvent ke) {
+    if(ke.getKeyCode() == KeyEvent.VK_ENTER) {
+      append("" + ke.getKeyChar());
+
+      if(getBuffer().length() > 0) {
+        append("" + getBuffer() + "\n");
+        
+        //handleCommand(getBuffer());
+	
+        buffer = "";
+      }
+      append("> ");
+      
+      ke.consume();
+    } else {
+      if(!ke.isAltDown() && !ke.isControlDown() && !ke.isMetaDown()) {
+        if(ke.getKeyCode() != 16) {
+          buffer += ke.getKeyChar();
+          consoleTextArea.append("" + ke.getKeyChar());
+        }
+      } else {
+        // Ctrl+D exits the command prompt
+        if(ke.getModifiers() == KeyEvent.CTRL_MASK && ke.getKeyCode() == KeyEvent.VK_D) {
+          System.exit(0);
+        }
+      }
+    }
+  }
+}}}
+
+There is a lot going on in this method, but building it incrementally seemed very confusing to me, so I thought I'd show it all first then explain it.
