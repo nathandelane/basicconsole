@@ -21,7 +21,7 @@ public class XMLDictionaryLoader {
 	private static DocumentBuilder builder;
 
 	public static Dictionary loadDictionary(String xmlFilePath, String xmlFileName, boolean isResource) {
-		Dictionary newDictionary = new Dictionary();
+		Dictionary newDictionary;
 		
 		builderFactory = DocumentBuilderFactory.newInstance();
 		
