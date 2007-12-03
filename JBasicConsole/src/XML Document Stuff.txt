@@ -1,0 +1,26 @@
+/*			Document request = builder.newDocument();
+			
+			Element methodCall = request.createElement("methodCall");
+			request.appendChild(methodCall);
+			
+			Element methodName = request.createElement("methodName");
+			Text text = request.createTextNode("calculateFibonacci");
+			methodName.appendChild(text);
+			methodCall.appendChild(methodName);
+			
+			Element params = request.createElement("params");
+			methodCall.appendChild(params);
+			
+			Element param = request.createElement("param");
+			methodCall.appendChild(param);
+			
+			Element value = request.createElement("value");
+			param.appendChild(value);
+			
+			Element intElement = request.createElement("int");
+			Text index = request.createTextNode("0");
+			intElement.appendChild(index);
+			value.appendChild(intElement);
+			
+			// Transmit stuff
+*/			
