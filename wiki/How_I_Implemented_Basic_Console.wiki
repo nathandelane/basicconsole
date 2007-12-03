@@ -134,7 +134,7 @@ First off, there are three general cases here - two of which fall into an even b
 
 The first case is in between the {{{if() {...}}} statement and the {{{...} else {...}}} statement.
 
-The very first thing I do is in the {{{if(..)}}} function call. Here I check to see if the keycode that was returned in the !KeyEvent object was the code for the Enter key. If it isn't, then I go onto the next block, and if it is, then this is what happens:
+The very first thing I do is in the {{{if(..)}}} function call. Here I check to see if the keycode that was returned in the !KeyEvent object is the code for the Enter key. If it isn't, then I go onto the next block, and if it is, then this is what happens:
 
   # Append the new line to the text area
   # If the buffer has at least one character in it, I append it on the next line
