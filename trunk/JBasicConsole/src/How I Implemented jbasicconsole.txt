@@ -1,0 +1,60 @@
+This page goes over how I implemented the basic console part of this project.
+
+= Introduction =
+
+If you look at the major operating systems (Microsoft Windows, Linux, Mac OS, and Unix), all of them have some kind of terminal program, console program, or both. The general idea around each of them is to provide access to text-based services and low-level access to the operating system. Other uses include scripting, programming, and task monitoring and management. Often the console or terminal also provides access to multiple shells that provide relatively different functionality, as well as kernel services, like directory listings, file permissions, and so on.
+
+There were two main reasons for me to write this console program in Java: 1) To do it and provide a Java based console to be used by the general public. 2) To provide cross platform like compatibility to some of the most popular shell interfaces, like BASH, Perl, Python, and WSH (Windows Scripting Host).  Windows fails most in this area, because they don't provide a standardized file system and they don't read script host lines at the beginning of scripts, for example:
+
+#!/bin/bash - for a BASH script
+
+
+= Basic Idea =
+
+The basic components for a console are obviously a frame or window and a text area. One important thing to note is that no console allows the user to go back and delete the history, so obviously we need to make the text area read only. Now that we've done that, we need some way to accept user input - in Java we have the !KeyListener interface. Add that to your text area. Lastly you have to use the key listener to capture keystrokes and then append them to the text area manually in some fashion that you find suitable. I prefer a prompt and I keep track of the keystrokes that are important to me in a buffer (String).
+
+Now that we have the basis, let's take a look at some code.
+
+= Coding A Console In Java =
+
+I like Swing because it's lightweight and I can make it look like the operating system that is running it.
+
+{{{
+import javax.swing.*;
+
+...
+}}}
+
+So let's start off with a JFrame:
+
+{{{
+import javax.swing.*;
+
+public class MyConsole extends JFrame {
+  public MyConsole() {
+    super("My Console"); // Create a JFrame with the title 'My Console'
+    ...
+}}}
+
+Next we need to add the text area. I will also set the layout to !BorderLayout here, for which we need the AWT package:
+
+{{{
+import javax.swing.*;
+import java.awt.*;
+
+public class MyConsole extends JFrame {
+  
+  private JTextArea consoleTextArea;
+
+  public MyConsole() {
+    super("My Console");
+    getContentPane().setLayout(new BorderLayout());
+    
+    consoleTextArea = new JTextArea();
+    consoleTextArea.setEditable(false);
+    
+    getContentPane().add(consoleTextArea, BorderLayout.CENTER);
+    ...
+}}}
+
+You will notice here that I have used a method getContentPane() a couple of times. This is because a Swing JFrame has several panes, which you can learn about in [http://java.sun.com/docs/books/tutorial/ Sun's Java Tutorial].
