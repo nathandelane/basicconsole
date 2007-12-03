@@ -152,4 +152,4 @@ The second block, in between the {{{...} else {...}}} and the ending {{{...} }}}
 
 That's it! Well that's all I'm going over here. I hope this was detailed enough to get someone else started. Please feel free to comment on this, because I know there are other ways to implement a console in Java. Also if you see an error in my code, please let me know...or if I forgot a major step.
 
-(C) December 2007, Nathan Lane
+(C) December 2007, Nathan Lane [mailto:nathamberlane@gmail.com (nathamberlane at gmail dot com)]
