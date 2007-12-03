@@ -142,4 +142,4 @@ The very first thing I do is in the {{{if(..)}}} function call. Here I check to 
   # After that I append my prompt text to the text area
   # And finally I consume the event, because I don't want the key event to be processed by the text area
 
-The second block, in between the {{{...} else {...}}} and the ending {{{...}}}} is the most general case, the case when pretty much anything is typed. Keep in mind that this method doesn't care if the key that was typed is printable, it'll append anything that isn't caught in its conditional statements.
+The second block, in between the {{{...} else {...}}} and the ending {{{...} }}} is the most general case, the case when pretty much anything is typed. Keep in mind that this method doesn't care if the key that was typed is printable, it'll append anything that isn't caught in its conditional statements.
