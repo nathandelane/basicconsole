@@ -60,7 +60,7 @@ public class MyConsole extends JFrame {
 
 You will notice here that I have used a method getContentPane() a couple of times. This is because a Swing JFrame has several panes, which you can learn about in [http://java.sun.com/docs/books/tutorial/ Sun's Java Tutorial].
 
-The next thing we need to do is implement the KeyListener interface.
+The next thing we need to do is implement the !KeyListener interface.
 
 {{{
 import javax.swing.*;
