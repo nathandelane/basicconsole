@@ -21,7 +21,7 @@ public class ExceptionHandler {
 	}
 	
 	private static void showErrorInConsole(Exception e) {
-		
+		e.printStackTrace();
 	}
 
 	private static String formatStackTrace(StackTraceElement ste[]) {
