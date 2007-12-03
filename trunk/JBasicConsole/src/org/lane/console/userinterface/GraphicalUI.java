@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 import org.lane.console.properties.*;
+import org.lane.console.exceptionhandler.*;
 
 public class GraphicalUI extends JFrame implements KeyListener {
 	
@@ -92,8 +93,7 @@ public class GraphicalUI extends JFrame implements KeyListener {
 				setBuffer(newBuffer);
 				setText(leftoverText + getBuffer());
 			} catch(Exception e) {
-				String stackTrace = formatStackTrace(e.getStackTrace());
-				JOptionPane.showMessageDialog(null, "Exception Occurred!\n" + stackTrace);
+				ExceptionHandler.logException(e);
 			}
 		}
 	}
@@ -136,16 +136,6 @@ public class GraphicalUI extends JFrame implements KeyListener {
 	
 	protected void addToBuffer(char chr) {
 		ConsoleProperties.addToBuffer(chr);
-	}
-	
-	protected String formatStackTrace(StackTraceElement ste[]) {
-		String stackTrace = "";
-		
-		for(int i = 0; i < ste.length; ++i) {
-			stackTrace += (ste[i].toString() + "\n");
-		}
-		
-		return stackTrace;
 	}
 	
 	protected void handleCommand(String buffer) {
