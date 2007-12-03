@@ -148,4 +148,4 @@ The second block, in between the {{{...} else {...}}} and the ending {{{...} }}}
   # Then I check to make sure that the keycode isn't 16, which is Ctrl again (some bug in my code probably) - if it isn't there then I go on
   # I add the character that was typed to the buffer
   # Then finally I add the character to the text area
-  # Otherwise (from number 1) I check for Ctrl + D being pressed, and if it is then I close the program. Historically Ctrl + D closes a terminal or console in *nix operating systems
+  # Otherwise (from number 1) I check for Ctrl + D being pressed, and if it is then I close the program. Historically Ctrl + D closes a terminal or console in Unix and Linux operating systems
