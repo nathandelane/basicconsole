@@ -95,7 +95,7 @@ public class MyConsole extends JFrame implements KeyListener {
 
 I use the keyword {{{this}}} because the class implementing the !KeyListener is "this" class ;). For those who don't know this refers to the current context (Class) in Java. You should also notice the new private String variable named buffer. This is where we will store user input.
 
-The last thing that is needed is to implement the keyPressed method. A knowledge of the KeyEvent class is necessary to do this efficiently. Here I will treat only a basic subset of possibilities that you might implement.
+The last thing that is needed is to implement the keyPressed method. A knowledge of the !KeyEvent class is necessary to do this efficiently. Here I will treat only a basic subset of possibilities that you might implement.
 
 {{{
   public void keyPressed(KeyEvent ke) {
