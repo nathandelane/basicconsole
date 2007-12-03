@@ -3,40 +3,60 @@ package org.lane.dictionary;
 /**
  * XMLDictionaryLoader
  * 
- * This class will load a Dictionary based on given
- * criteria:
- * 
- * String classpath
- * String classname
- * boolean isResource, tells whether to look in the current
- * jar or not
- * 
+ * This class will load a Dictionary XML definition file.
+ *  
  * @author nathanl
  *
  */
 
 import java.io.*;
+
 import org.w3c.dom.*;
+import org.xml.sax.SAXException;
+
 import javax.xml.parsers.*;
 
 public class XMLDictionaryLoader {
 	
-	public XMLDictionaryLoader(String classPath, String className, boolean isResource) {
-		try {
-			DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder = builderFactory.newDocumentBuilder();
+	private static DocumentBuilderFactory builderFactory;
+	private static DocumentBuilder builder;
 
-			InputStream in = new FileInputStream("");
-			Document response = builder.parse(in);
+	public static Dictionary loadDictionary(String xmlFilePath, String xmlFileName, boolean isResource) {
+		Dictionary newDictionary = new Dictionary();
+		
+		builderFactory = DocumentBuilderFactory.newInstance();
+		
+		try {
+			builder = builderFactory.newDocumentBuilder();
+
+			InputStream in;
+		
+			in = new FileInputStream("");
+		
+			Document response;
+		
+			response = builder.parse(in);
 			in.close();
 			
 			NodeList doubles = response.getElementsByTagName("double");
 			Node datum = doubles.item(0);
 			Text result = (Text) datum.getFirstChild();
 			System.out.println(result.getNodeValue());
-		} catch(Exception e) {
-			
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
+		return newDictionary;
 	}
 
 }
