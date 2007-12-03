@@ -58,3 +58,87 @@ public class MyConsole extends JFrame {
 }}}
 
 You will notice here that I have used a method getContentPane() a couple of times. This is because a Swing JFrame has several panes, which you can learn about in [http://java.sun.com/docs/books/tutorial/ Sun's Java Tutorial].
+
+The next thing we need to do is implement the !KeyListener interface and add it to the text area:
+
+{{{
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class MyConsole extends JFrame implements KeyListener {
+  
+  private JTextArea consoleTextArea;
+  private String buffer;
+
+  public MyConsole() {
+    super("My Console");
+    getContentPane().setLayout(new BorderLayout());
+    
+    consoleTextArea = new JTextArea();
+    consoleTextArea.setEditable(false);
+    
+    getContentPane().add(consoleTextArea, BorderLayout.CENTER);
+    
+    consoleTextArea.addKeyListener(this);
+    
+    setVisible(true);
+    consoleTextArea.append("> ");
+  }
+  
+  public void keyPressed(KeyEvent ke) { }
+  public void keyReleased(KeyEvent ke) { }
+  public void keyTyped(KeyEvent ke) { }
+  ...
+}}}
+
+I use the keyword {{{this}}} because the class implementing the !KeyListener is "this" class ;). For those who don't know this refers to the current context (Class) in Java. You should also notice the new private String variable named buffer. This is where we will store user input.
+
+The last thing that is needed is to implement the keyPressed method. A knowledge of the !KeyEvent class is necessary to do this efficiently. Here I will treat only a basic subset of possibilities that you might implement.
+
+{{{
+  public void keyPressed(KeyEvent ke) {
+    if(ke.getKeyCode() == KeyEvent.VK_ENTER) {
+      consoleTextArea.append("" + ke.getKeyChar());
+
+      if(getBuffer().length() > 0) {
+        consoleTextArea.append("" + getBuffer() + "\n");
+        
+        //handleCommand(getBuffer());
+	
+        buffer = "";
+      }
+      consoleTextArea.append("> ");
+      
+      ke.consume();
+    } else {
+      if(!ke.isAltDown() && !ke.isControlDown() && !ke.isMetaDown()) {
+        if(ke.getKeyCode() != 16) {
+          buffer += ke.getKeyChar();
+          consoleTextArea.append("" + ke.getKeyChar());
+        }
+      } else {
+        // Ctrl+D exits the command prompt
+        if(ke.getModifiers() == KeyEvent.CTRL_MASK && ke.getKeyCode() == KeyEvent.VK_D) {
+          System.exit(0);
+        }
+      }
+    }
+  }
+}}}
+
+There is a lot going on in this method, but building it incrementally seemed very confusing to me, so I thought I'd show it all first then explain it.
+
+First off, there are three general cases here - two of which fall into an even broader case.
+
+The first case is in between the {{{if() {...}}} statement and the {{{...} else {...}}} statement.
+
+The very first thing I do is in the {{{if(..)}}} function call. Here I check to see if the keycode that was returned in the KeyEvent object was the code for the Enter key. If it isn't, then I go onto the next block, and if it is, then this is what happens:
+
+  # Append the new line to the text area
+  # If the buffer has at least one character in it, I append it on the next line
+  # Then ideally I would handle any recognized commands here - that part is stubbed out for another time
+  # After that I append my prompt text to the text area
+  # And finally I consume the event, because I don't want the key event to be processed by the text area
+
+The second block, in between the {{{...} else {...}}} and the ending {{{...} }}} is the most general case, the case when pretty much anything is typed. Keep in mind that this method doesn't care if the key that was typed is printable, it'll append anything that isn't caught in its conditional statements.

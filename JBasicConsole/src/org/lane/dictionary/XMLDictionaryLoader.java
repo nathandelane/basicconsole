@@ -10,11 +10,11 @@ package org.lane.dictionary;
  */
 
 import java.io.*;
-
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
-
 import javax.xml.parsers.*;
+
+import org.lane.console.exceptionhandler.*;
 
 public class XMLDictionaryLoader {
 	
@@ -42,18 +42,8 @@ public class XMLDictionaryLoader {
 			Node datum = doubles.item(0);
 			Text result = (Text) datum.getFirstChild();
 			System.out.println(result.getNodeValue());
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			ExceptionHandler.logException(e);
 		}
 		
 		return newDictionary;
