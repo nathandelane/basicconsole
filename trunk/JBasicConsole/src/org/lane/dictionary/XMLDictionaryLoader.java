@@ -20,7 +20,7 @@ public class XMLDictionaryLoader {
 	private static DocumentBuilderFactory builderFactory;
 	private static DocumentBuilder builder;
 
-	public static Dictionary loadDictionary(String xmlFilePath, String xmlFileName, boolean isResource) {
+	public static Dictionary loadDictionary(String xmlFilePath) {
 		Dictionary newDictionary;
 		
 		builderFactory = DocumentBuilderFactory.newInstance();
@@ -30,7 +30,7 @@ public class XMLDictionaryLoader {
 
 			InputStream in;
 		
-			in = new FileInputStream("");
+			in = new FileInputStream(xmlFilePath);
 		
 			Document response;
 		
