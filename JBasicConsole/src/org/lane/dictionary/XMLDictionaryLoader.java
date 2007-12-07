@@ -41,11 +41,17 @@ public class XMLDictionaryLoader {
 			Node datum = doubles.item(0);
 			Text result = (Text) datum.getFirstChild();
 			System.out.println(result.getNodeValue());
+			
+			newDictionary = new Dictionary(null, null);
+			
+			return newDictionary;
 		} catch (Exception e) {
 			ExceptionHandler.logException(e);
 		}
 		
-		return newDictionary;
+		
+		
+		return null;
 	}
 
 }
