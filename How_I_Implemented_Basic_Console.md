@@ -1,0 +1,154 @@
+This page goes over how I implemented the basic console part of this project.
+
+# Introduction #
+
+If you look at the major operating systems (Microsoft Windows, Linux, Mac OS, and Unix), all of them have some kind of terminal program, console program, or both. The general idea around each of them is to provide access to text-based services and low-level access to the operating system. Other uses include scripting, programming, and task monitoring and management. Often the console or terminal also provides access to multiple shells that provide relatively different functionality, as well as kernel services, like directory listings, file permissions, and so on.
+
+There were two main reasons for me to write this console program in Java: 1) To do it and provide a Java based console to be used by the general public. 2) To provide cross platform like compatibility to some of the most popular shell interfaces, like BASH, Perl, Python, and WSH (Windows Scripting Host).  Windows fails most in this area, because they don't provide a standardized file system and they don't read script host lines at the beginning of scripts, for example:
+
+#!/bin/bash - for a BASH script
+
+
+# Basic Idea #
+
+The basic components for a console are obviously a frame or window and a text area. One important thing to note is that no console allows the user to go back and delete the history, so obviously we need to make the text area read only. Now that we've done that, we need some way to accept user input - in Java we have the KeyListener interface. Add that to your text area. Lastly you have to use the key listener to capture keystrokes and then append them to the text area manually in some fashion that you find suitable. I prefer a prompt and I keep track of the keystrokes that are important to me in a buffer (String).
+
+Now that we have the basis, let's take a look at some code.
+
+# Coding A Console In Java #
+
+I like Swing because it's lightweight and I can make it look like the operating system that is running it.
+
+```
+import javax.swing.*;
+
+...
+```
+
+So let's start off with a JFrame:
+
+```
+import javax.swing.*;
+
+public class MyConsole extends JFrame {
+  public MyConsole() {
+    super("My Console"); // Create a JFrame with the title 'My Console'
+    ...
+```
+
+Next we need to add the text area. I will also set the layout to BorderLayout here, for which we need the AWT package:
+
+```
+import javax.swing.*;
+import java.awt.*;
+
+public class MyConsole extends JFrame {
+  
+  private JTextArea consoleTextArea;
+
+  public MyConsole() {
+    super("My Console");
+    getContentPane().setLayout(new BorderLayout());
+    
+    consoleTextArea = new JTextArea();
+    consoleTextArea.setEditable(false);
+    
+    getContentPane().add(consoleTextArea, BorderLayout.CENTER);
+    ...
+```
+
+You will notice here that I have used a method getContentPane() a couple of times. This is because a Swing JFrame has several panes, which you can learn about in [Sun's Java Tutorial](http://java.sun.com/docs/books/tutorial/).
+
+The next thing we need to do is implement the KeyListener interface and add it to the text area:
+
+```
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class MyConsole extends JFrame implements KeyListener {
+  
+  private JTextArea consoleTextArea;
+  private String buffer;
+
+  public MyConsole() {
+    super("My Console");
+    getContentPane().setLayout(new BorderLayout());
+    
+    consoleTextArea = new JTextArea();
+    consoleTextArea.setEditable(false);
+    
+    getContentPane().add(consoleTextArea, BorderLayout.CENTER);
+    
+    consoleTextArea.addKeyListener(this);
+    
+    setVisible(true);
+    consoleTextArea.append("> ");
+  }
+  
+  public void keyPressed(KeyEvent ke) { }
+  public void keyReleased(KeyEvent ke) { }
+  public void keyTyped(KeyEvent ke) { }
+  ...
+```
+
+I use the keyword `this` because the class implementing the KeyListener is "this" class ;). For those who don't know this refers to the current context (Class) in Java. You should also notice the new private String variable named buffer. This is where we will store user input.
+
+The last thing that is needed is to implement the keyPressed method. A knowledge of the KeyEvent class is necessary to do this efficiently. Here I will treat only a basic subset of possibilities that you might implement.
+
+```
+  public void keyPressed(KeyEvent ke) {
+    if(ke.getKeyCode() == KeyEvent.VK_ENTER) {
+      consoleTextArea.append("" + ke.getKeyChar());
+
+      if(getBuffer().length() > 0) {
+        consoleTextArea.append("" + getBuffer() + "\n");
+        
+        //handleCommand(getBuffer());
+	
+        buffer = "";
+      }
+      consoleTextArea.append("> ");
+      
+      ke.consume();
+    } else {
+      if(!ke.isAltDown() && !ke.isControlDown() && !ke.isMetaDown()) {
+        if(ke.getKeyCode() != 16) {
+          buffer += ke.getKeyChar();
+          consoleTextArea.append("" + ke.getKeyChar());
+        }
+      } else {
+        // Ctrl+D exits the command prompt
+        if(ke.getModifiers() == KeyEvent.CTRL_MASK && ke.getKeyCode() == KeyEvent.VK_D) {
+          System.exit(0);
+        }
+      }
+    }
+  }
+```
+
+There is a lot going on in this method, but building it incrementally seemed very confusing to me, so I thought I'd show it all first then explain it.
+
+First off, there are three general cases here - two of which fall into an even broader case.
+
+The first case is in between the `if() {...` statement and the `...} else {...` statement.
+
+The very first thing I do is in the `if(..)` function call. Here I check to see if the keycode that was returned in the KeyEvent object is the code for the Enter key. If it isn't, then I go onto the next block, and if it is, then this is what happens:
+
+  1. Append the new line to the text area
+  1. If the buffer has at least one character in it, I append it on the next line
+  1. Then ideally I would handle any recognized commands here - that part is stubbed out for another time
+  1. After that I append my prompt text to the text area
+  1. And finally I consume the event, because I don't want the key event to be processed by the text area
+
+The second block, in between the `...} else {...` and the ending `...} ` is the most general case, the case when pretty much anything is typed. Keep in mind that this method doesn't care if the key that was typed is printable, it'll append anything that isn't caught in its conditional statements.
+
+  1. First I check for Ctrl, Alt, and Meta keys being pressed during the key event (Meta is not common on regular PC keyboards), but I don't filter out Shift, which is also a modifier key like the others. The reason for this is because I want capital letters and symbols that require Shift to be pressed.
+  1. Then I check to make sure that the keycode isn't 16, which is Ctrl again (some bug in my code probably) - if it isn't there then I go on
+  1. I add the character that was typed to the buffer
+  1. Then finally I add the character to the text area
+  1. Otherwise (from number 1) I check for Ctrl + D being pressed, and if it is then I close the program. Historically Ctrl + D closes a terminal or console in Unix and Linux operating systems
+
+That's it! Well that's all I'm going over here. I hope this was detailed enough to get someone else started. Please feel free to comment on this, because I know there are other ways to implement a console in Java. Also if you see an error in my code, please let me know...or if I forgot a major step.
+
+(C) December 2007, Nathan Lane (nathamberlane at gmail dot com)
